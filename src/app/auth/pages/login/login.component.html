@@ -1,0 +1,52 @@
+<div class="col-md-4 offset-md-4 mt-5">
+  <div class="card">
+    <h4 class="card-header">Login</h4>
+    <div class="card-body">
+      <form
+        [formGroup]="loginForm"
+        class="login"
+        (ngSubmit)="login()"
+        novalidate
+      >
+        <div class="login_email">
+          <mat-form-field class="full-width" appearance="standard">
+            <input
+              id="email"
+              matInput
+              placeholder="Email Address"
+              formControlName="email"
+              required
+            />
+            <mat-error
+              class="login_email_error"
+              *ngIf="f.email.errors?.required"
+              >Email is required</mat-error
+            >
+            <mat-error class="login_email_error" *ngIf="f.email.errors?.email"
+              >Please enter a valid email</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="login_action">
+          <button
+            [disabled]="loginForm.invalid"
+            [class.login_action_spacing]="loginForm.invalid"
+            mat-raised-button
+            color="primary"
+          >
+            <span
+              *ngIf="isProcessing"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            Login
+          </button>
+        </div>
+        <div class="login_error">
+          <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

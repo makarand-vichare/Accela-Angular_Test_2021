@@ -1,0 +1,14 @@
+.post {
+  &_title {
+  }
+  &_body {
+  }
+  &_action {
+    &_spacing {
+      margin-top: 1rem;
+    }
+  }
+  &_error {
+    margin-top: 1rem;
+  }
+}

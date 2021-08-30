@@ -1,0 +1,33 @@
+<div class="text-right">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="createPostWithoutCache()"
+    class="mr-1"
+  >
+    Create Post (No route change)
+  </button>
+  <button mat-raised-button color="primary" (click)="createPost()">
+    Create Post
+  </button>
+</div>
+<div class="alert alert-danger" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+<div>
+  <mat-tab-group
+    id="tabGroup"
+    (selectedTabChange)="onSelectedTabChange($event)"
+  >
+    <mat-tab label="My Posts">
+      <ng-template matTabContent>
+        <app-post-items [posts$]="posts$"></app-post-items>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Other Posts">
+      <ng-template matTabContent>
+        <app-post-items [posts$]="posts$"></app-post-items>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

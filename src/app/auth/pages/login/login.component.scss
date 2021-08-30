@@ -1,0 +1,15 @@
+.login {
+  &_email {
+    &_error {
+      font-size: 1rem;
+    }
+  }
+  &_action {
+    &_spacing {
+      margin-top: 1rem;
+    }
+  }
+  &_error {
+    margin-top: 1rem;
+  }
+}

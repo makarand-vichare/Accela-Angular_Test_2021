@@ -1,0 +1,72 @@
+<div class="col-md-4 offset-md-4 mt-5">
+  <div class="card">
+    <h4 class="card-header">Create Post</h4>
+    <div class="card-body">
+      <form
+        [formGroup]="newPostForm"
+        class="post"
+        (ngSubmit)="onAdd()"
+        novalidate
+      >
+        <div class="post_title">
+          <mat-form-field class="full-width" appearance="standard">
+            <input
+              matInput
+              id="title"
+              placeholder="Title"
+              formControlName="title"
+              required
+            />
+            <mat-error class="title_error" *ngIf="f.title.errors?.required"
+              >Title is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="post_body">
+          <mat-form-field class="full-width" appearance="standard">
+            <textarea
+              matInput
+              id="body"
+              placeholder="Body"
+              formControlName="body"
+              rows="6"
+              required
+            >
+            </textarea>
+            <mat-error class="body_error" *ngIf="f.body.errors?.required"
+              >Body is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="post_action">
+          <button
+            [disabled]="newPostForm.invalid"
+            [class.post_action_spacing]="newPostForm.invalid"
+            mat-raised-button
+            color="primary"
+          >
+            <span
+              *ngIf="isProcessing"
+              class="spinner-border spinner-border-sm mr-1"
+            ></span>
+            Submit
+          </button>
+          <button
+            [class.post_action_spacing]="newPostForm.invalid"
+            mat-raised-button
+            color="primary"
+            class="ml-2"
+            (click)="onCancel()"
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="post_error">
+          <div class="alert alert-danger" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

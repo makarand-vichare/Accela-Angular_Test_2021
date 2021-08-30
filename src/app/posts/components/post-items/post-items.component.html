@@ -1,0 +1,7 @@
+<div class="table-responsive">
+  <div class="table mb-0" *ngIf="posts$ | async as posts">
+    <div *ngFor="let post of posts">
+      <app-post [post]="post"></app-post>
+    </div>
+  </div>
+</div>
