@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { merge, Observable, of, Subject, throwError } from 'rxjs';
 
-import { catchError, scan } from 'rxjs/operators';
+import { catchError, scan, share, shareReplay } from 'rxjs/operators';
 import { BaseService } from 'src/app/shared/base.service';
 import { environment } from 'src/environments/environment';
 import { Post } from '../models/post.model';
@@ -22,9 +22,10 @@ export class PostService extends BaseService {
   }
 
   public get posts$() {
-    return this.httpClient
-      .get<Post[]>(`${environment.PostsUrl}`)
-      .pipe(catchError((err) => this.handleError(err)));
+    return this.httpClient.get<Post[]>(`${environment.PostsUrl}`).pipe(
+      shareReplay(),
+      catchError((err) => this.handleError(err))
+    );
   }
 
   public get postsWithAddedPost$() {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs/tab-group';
 import { Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, EMPTY } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, concatMap, filter, map } from 'rxjs/operators';
 import { User } from 'src/app/auth/models/user.model';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Post } from '../../models/post.model';
@@ -45,26 +45,50 @@ export class PostListComponent implements OnInit {
     });
   }
 
-  public get posts$() {
-    return this.postsData$;
+  public get postsMine$() {
+    return this.postsMineData$;
   }
 
-  private postsData$ = combineLatest([
+  public get postsOther$() {
+    return this.postsOtherData$;
+  }
+
+  private postsMineData$ = combineLatest([
     this.postService.postsWithAddedPost$,
     this.selectedTabAction$,
+    this.authService.loggedInUser,
   ]).pipe(
-    map(([posts, selectedTabId]) => {
-      posts = posts.filter((post: Post) =>
-        selectedTabId == 0
-          ? this.filterPostsByMe(post)
-          : this.filterPostsByOther(post)
-      );
-      if (selectedTabId == 0 && this.cachedPost != null) {
+    filter<[Post[], number, User]>(([posts, selectedTab, user]) => {
+      return selectedTab == 0;
+    }),
+    map(([posts, selectedTab, user]) => {
+      posts = posts.filter((post: Post) => this.filterPostsByMe(post));
+      if (this.cachedPost != null) {
         posts.unshift(this.cachedPost);
       }
+      posts.map(p => (p.userName = user.name));
       return posts;
     }),
-    catchError(err => {
+    catchError((err) => {
+      this.errorMessage = err;
+      return EMPTY;
+    })
+  );
+
+  private postsOtherData$ = combineLatest([
+    this.postService.posts$,
+    this.selectedTabAction$,
+    this.authService.users$,
+  ]).pipe(
+    filter<[Post[], number, User[]]>(([posts, selectedTab]) => {
+      return selectedTab == 1;
+    }),
+    map(([posts, selectedTab, users]) => {
+      posts = posts.filter((post: Post) => this.filterPostsByOther(post));
+      posts.map((p) => (p.userName = users.find((u) => u.id == p.userId)?.name));
+      return posts;
+    }),
+    catchError((err) => {
       this.errorMessage = err;
       return EMPTY;
     })
@@ -87,12 +111,12 @@ export class PostListComponent implements OnInit {
   }
 
   createPostWithoutCache(): void {
-    let post: Post = {
+    const post = {
       id: 0,
       userId: 1,
       title: 'title 1',
       body: 'body1',
-    };
+    } as Post;
     this.postService.addPost(post);
   }
 }

@@ -21,12 +21,12 @@
   >
     <mat-tab label="My Posts">
       <ng-template matTabContent>
-        <app-post-items [posts$]="posts$"></app-post-items>
+        <app-post-items [posts$]="postsMine$"></app-post-items>
       </ng-template>
     </mat-tab>
     <mat-tab label="Other Posts">
       <ng-template matTabContent>
-        <app-post-items [posts$]="posts$"></app-post-items>
+        <app-post-items [posts$]="postsOther$"></app-post-items>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

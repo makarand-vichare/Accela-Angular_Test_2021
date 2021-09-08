@@ -45,12 +45,12 @@ export class AddEditComponent implements OnInit {
 
     this.isProcessing = true;
 
-    let post: Post = {
+    let post = {
       id: 0,
       userId: this.loggedInUser?.id,
       title: this.f.title.value,
       body: this.f.body.value,
-    };
+    } as Post;
 
     this.postService
       .addPost(post)

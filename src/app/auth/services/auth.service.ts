@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { BaseService } from 'src/app/shared/base.service';
 import { environment } from 'src/environments/environment';
@@ -43,6 +43,7 @@ export class AuthService extends BaseService {
           userInfo = {
             isAuthenticated: true,
             id: user.id,
+            name:user.name
           } as User;
 
           sessionStorage.setItem(
@@ -57,6 +58,12 @@ export class AuthService extends BaseService {
     );
   }
 
+  public get users$() {
+    return this.httpClient.get<User[]>(`${environment.UsersUrl}`).pipe(
+      shareReplay(),
+      catchError((err) => this.handleError(err))
+    );
+  }
   logout(): boolean {
     this.clearSessionInfo();
     this.userSubject.next(null as any);
