@@ -35,6 +35,7 @@ describe('AuthService', () => {
       const expectedUser: User = {
         id: 1,
         isAuthenticated: true,
+        name:'name1'
       };
       spyOn(Storage.prototype, 'getItem').and.callFake((key) => {
         return JSON.stringify(expectedUser);

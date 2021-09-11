@@ -90,6 +90,7 @@ describe('PostService', () => {
         body: 'body3',
         title: 'title3',
         userId: 1,
+        userName: 'userName1',
       };
 
       const expectedPosts = [newPost, ...oldPosts];

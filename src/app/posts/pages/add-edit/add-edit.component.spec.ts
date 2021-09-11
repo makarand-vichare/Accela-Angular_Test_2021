@@ -152,6 +152,7 @@ describe('AddEditComponent', () => {
       spyOn(authService, 'getSessionInfo').and.returnValue({
         id: 1,
         isAuthenticated: true,
+        name: 'name1',
       });
       spyOn(router, 'navigate').and.callThrough();
 

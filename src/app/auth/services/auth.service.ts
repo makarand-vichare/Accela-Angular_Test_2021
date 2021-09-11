@@ -43,7 +43,7 @@ export class AuthService extends BaseService {
           userInfo = {
             isAuthenticated: true,
             id: user.id,
-            name:user.name
+            name: user.name,
           } as User;
 
           sessionStorage.setItem(
@@ -59,10 +59,10 @@ export class AuthService extends BaseService {
   }
 
   public get users$() {
-    return this.httpClient.get<User[]>(`${environment.UsersUrl}`).pipe(
-      shareReplay(),
-      catchError((err) => this.handleError(err))
-    );
+    return this.httpClient
+      .get<User[]>(`${environment.UsersUrl}`)
+      .pipe(catchError((err) => this.handleError(err)))
+      .pipe(shareReplay());
   }
   logout(): boolean {
     this.clearSessionInfo();

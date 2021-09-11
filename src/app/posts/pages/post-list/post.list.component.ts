@@ -45,15 +45,7 @@ export class PostListComponent implements OnInit {
     });
   }
 
-  public get postsMine$() {
-    return this.postsMineData$;
-  }
-
-  public get postsOther$() {
-    return this.postsOtherData$;
-  }
-
-  private postsMineData$ = combineLatest([
+  public postsMine$ = combineLatest([
     this.postService.postsWithAddedPost$,
     this.selectedTabAction$,
     this.authService.loggedInUser,
@@ -66,7 +58,7 @@ export class PostListComponent implements OnInit {
       if (this.cachedPost != null) {
         posts.unshift(this.cachedPost);
       }
-      posts.map(p => (p.userName = user.name));
+      posts.map((p) => (p.userName = user.name));
       return posts;
     }),
     catchError((err) => {
@@ -75,7 +67,7 @@ export class PostListComponent implements OnInit {
     })
   );
 
-  private postsOtherData$ = combineLatest([
+  public postsOther$ = combineLatest([
     this.postService.posts$,
     this.selectedTabAction$,
     this.authService.users$,
@@ -85,7 +77,9 @@ export class PostListComponent implements OnInit {
     }),
     map(([posts, selectedTab, users]) => {
       posts = posts.filter((post: Post) => this.filterPostsByOther(post));
-      posts.map((p) => (p.userName = users.find((u) => u.id == p.userId)?.name));
+      posts.map(
+        (p) => (p.userName = users.find((u) => u.id == p.userId)?.name)
+      );
       return posts;
     }),
     catchError((err) => {
