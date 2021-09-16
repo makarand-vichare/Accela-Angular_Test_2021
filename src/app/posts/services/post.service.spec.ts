@@ -12,7 +12,7 @@ import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 describe('PostService', () => {
-  let httpTestingController: HttpTestingController;
+  let httpMock: HttpTestingController;
   let service: PostService;
 
   beforeEach(() => {
@@ -21,8 +21,12 @@ describe('PostService', () => {
       providers: [PostService],
     });
 
-    httpTestingController = TestBed.inject(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(PostService);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   describe('ioc dependency check', () => {
@@ -45,41 +49,54 @@ describe('PostService', () => {
       });
 
       //assert
-      const request = httpTestingController.expectOne(
-        `${environment.PostsUrl}`
-      );
-      expect(request.request.method).toBe('GET');
-      request.flush(expectedPosts);
+      const request = httpMock.expectOne(`${environment.PostsUrl}`);
 
-      httpTestingController.verify();
+      request.flush(expectedPosts);
+      expect(request.request.method).toBe('GET');
     });
 
     it('should thrown error if api call fails', () => {
       //arrange
       spyOn(service, 'handleError').and.callThrough();
+      const status = 500;
+      const statusText = 'Server error';
+      const errorEvent = new ErrorEvent('API error');
+      let actualError: HttpErrorResponse | undefined;
 
       //act
       service.posts$.subscribe(
-        (data) => fail('Should have failed with 500 error'),
+        () => {
+          fail('next handler must not be called');
+        },
         (error: HttpErrorResponse) => {
-          // expect(error.status).toEqual(500);
-          // expect(error.error).toContain('500 error');
-          expect(service.handleError).toHaveBeenCalledTimes(1);
+          actualError = error;
+        },
+        () => {
+          fail('complete handler must not be called');
         }
       );
 
+      const request = httpMock.expectOne(`${environment.PostsUrl}`);
+      request.error(errorEvent, {
+        status: status,
+        statusText: statusText,
+      });
+
+      if (!actualError) {
+        throw new Error('Error needs to be defined');
+      }
+
       //assert
-      const request = httpTestingController.expectOne(
-        `${environment.PostsUrl}`
-      );
       expect(request.request.method).toBe('GET');
-      request.flush('500 error', { status: 500, statusText: 'Error occured' });
-      //request.error(new ErrorEvent('Error'));
+      expect(actualError.error).toBe(errorEvent);
+      expect(actualError.status).toBe(status);
+      expect(actualError.statusText).toBe(statusText);
+      expect(service.handleError).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('postsWithAddedPost$', () => {
-    it('should merge post and new post', () => {
+    fit('should merge post and new post', () => {
       //arrange
       const oldPosts: Post[] = [
         { id: 1, body: 'body1', title: 'title1' } as Post,
@@ -100,15 +117,24 @@ describe('PostService', () => {
         of(newPost)
       );
 
-      spyOnProperty(service, 'posts$').and.returnValue(of(oldPosts));
-
       //act
       service.postsWithAddedPost$.subscribe((t) => {
         result = t;
       });
 
+      const request = httpMock.expectOne(`${environment.PostsUrl}`);
+      request.flush(expectedPosts);
+
       //assert
+      expect(request.request.method).toBe('GET');
       expect(expectedPosts).toEqual(result);
     });
+
+    /*     it('creates a spy object with properties', function () {
+      let obj = jasmine.createSpyObj('myObject', {}, { x: 3, y: 4 });
+      expect(obj.x).toEqual(3);
+      spyPropertyGetter(obj, 'x').and.returnValue(1);
+      expect(obj.x).toEqual(1);
+    }); */
   });
 });

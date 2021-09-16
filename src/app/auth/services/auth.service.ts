@@ -64,6 +64,7 @@ export class AuthService extends BaseService {
       .pipe(catchError((err) => this.handleError(err)))
       .pipe(shareReplay());
   }
+
   logout(): boolean {
     this.clearSessionInfo();
     this.userSubject.next(null as any);

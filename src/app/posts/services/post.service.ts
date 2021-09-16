@@ -36,7 +36,7 @@ export class PostService extends BaseService {
     );
   }
 
-  addPost(post: Post): Observable<boolean> {
+  public addPost(post: Post): Observable<boolean> {
     this.postInsertedSubject.next(post);
     return of(true);
   }
