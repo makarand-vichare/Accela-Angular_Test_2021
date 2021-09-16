@@ -25,10 +25,6 @@ describe('PostService', () => {
     service = TestBed.inject(PostService);
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
-
   describe('ioc dependency check', () => {
     it('should be created', () => {
       expect(service).toBeTruthy();
@@ -52,6 +48,7 @@ describe('PostService', () => {
       const request = httpMock.expectOne(`${environment.PostsUrl}`);
 
       request.flush(expectedPosts);
+      httpMock.verify();
       expect(request.request.method).toBe('GET');
     });
 
@@ -82,6 +79,7 @@ describe('PostService', () => {
         statusText: statusText,
       });
 
+      httpMock.verify();
       if (!actualError) {
         throw new Error('Error needs to be defined');
       }
@@ -117,16 +115,14 @@ describe('PostService', () => {
         of(newPost)
       );
 
+      spyOnProperty(service, 'posts$').and.returnValue(of(oldPosts));
+
       //act
       service.postsWithAddedPost$.subscribe((t) => {
         result = t;
       });
 
-      const request = httpMock.expectOne(`${environment.PostsUrl}`);
-      request.flush(expectedPosts);
-
       //assert
-      expect(request.request.method).toBe('GET');
       expect(expectedPosts).toEqual(result);
     });
 
