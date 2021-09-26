@@ -5,7 +5,7 @@ import { LoginComponent } from './auth/pages/login/login.component';
 
 const postsModule = () =>
   import('./posts/posts.module').then((x) => x.PostsModule);
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: 'posts', loadChildren: postsModule, canActivate: [AuthorizeGuard] },
   { path: '**', redirectTo: '' },

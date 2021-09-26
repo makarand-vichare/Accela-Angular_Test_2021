@@ -3,7 +3,7 @@
     <a class="nav-item nav-link" (click)="logout()">Logout</a>
   </div>
 </nav>
-
+<app-notification></app-notification>
 <div class="app-container" [ngClass]="{ 'bg-light': isLoggedIn }">
   <router-outlet></router-outlet>
 </div>

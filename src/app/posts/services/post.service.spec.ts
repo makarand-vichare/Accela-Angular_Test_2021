@@ -52,20 +52,20 @@ describe('PostService', () => {
       expect(request.request.method).toBe('GET');
     });
 
-    it('should thrown error if api call fails', () => {
+    fit('should thrown error if api call fails', () => {
       //arrange
       spyOn(service, 'handleError').and.callThrough();
       const status = 500;
       const statusText = 'Server error';
-      const errorEvent = new ErrorEvent('API error');
-      let actualError: HttpErrorResponse | undefined;
+
+      let actualError: any = undefined;
 
       //act
       service.posts$.subscribe(
         () => {
           fail('next handler must not be called');
         },
-        (error: HttpErrorResponse) => {
+        (error: ErrorEvent) => {
           actualError = error;
         },
         () => {
@@ -74,12 +74,12 @@ describe('PostService', () => {
       );
 
       const request = httpMock.expectOne(`${environment.PostsUrl}`);
+      const errorEvent = new ErrorEvent('APIError');
       request.error(errorEvent, {
         status: status,
         statusText: statusText,
       });
 
-      httpMock.verify();
       if (!actualError) {
         throw new Error('Error needs to be defined');
       }
@@ -90,6 +90,8 @@ describe('PostService', () => {
       expect(actualError.status).toBe(status);
       expect(actualError.statusText).toBe(statusText);
       expect(service.handleError).toHaveBeenCalledTimes(1);
+
+      httpMock.verify();
     });
   });
 

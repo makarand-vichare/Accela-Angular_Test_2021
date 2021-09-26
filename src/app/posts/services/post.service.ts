@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { merge, Observable, of, Subject, throwError } from 'rxjs';
 
 import { catchError, scan, share, shareReplay, tap } from 'rxjs/operators';
-import { BaseService } from 'src/app/shared/base.service';
+import { BaseService } from 'src/app/shared/services/base.service';
 import { environment } from 'src/environments/environment';
 import { Post } from '../models/post.model';
 

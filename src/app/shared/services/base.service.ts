@@ -12,7 +12,7 @@ export abstract class BaseService {
       // The response body may contain clues as to what went wrong,
       errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
     }
-    console.error(err);
-    return throwError(errorMessage);
+   // console.error(err);
+    return throwError(err);
   }
 }

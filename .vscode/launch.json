@@ -4,38 +4,128 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "pwa-chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-          "type": "pwa-chrome",
-          "request": "attach",
-          "name": "Unit tests",
-          "address": "localhost",
-          "port": 9333,
-          "sourceMaps": true,
-          "webRoot": "${workspaceFolder}"
-        },
-        {
-          "name": "Launch Chrome with ng test",
-          "type": "pwa-chrome",
-          "request": "launch",
-          "url": "http://localhost:9876/debug.html",
-          "webRoot": "${workspaceRoot}"
-        },
-        {
-          "name": "Launch ng e2e",
-          "type": "node",
-          "request": "launch",
-          "program": "${workspaceRoot}/node_modules/protractor/bin/protractor",
-          "protocol": "inspector",
-          "args": [
-            "${workspaceRoot}/protractor.conf.js"
-          ]
+      {
+        "name": "ng serve",
+        "type": "chrome",
+        "request": "launch",
+        "preLaunchTask": "npm: start",
+        "url": "http://localhost:4200/",
+        "webRoot": "${workspaceFolder}",
+        "sourceMapPathOverrides": {
+          "webpack:/*": "${webRoot}/*",
+          "/./*": "${webRoot}/*",
+          "/src/*": "${webRoot}/*",
+          "/*": "*",
+          "/./~/*": "${webRoot}/node_modules/*"
         }
+      },
+      {
+        "name": "ng test",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:9876/debug.html",
+        "webRoot": "${workspaceFolder}",
+        "sourceMaps": true,
+        "sourceMapPathOverrides": {
+          "webpack:/*": "${webRoot}/*",
+          "/./*": "${webRoot}/*",
+          "/src/*": "${webRoot}/*",
+          "/*": "*",
+          "/./~/*": "${webRoot}/node_modules/*"
+        }
+      },
+      {
+        "name": "ng e2e",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/node_modules/protractor/bin/protractor",
+        "protocol": "inspector",
+        "args": [
+          "${workspaceFolder}/e2e/protractor.conf.js"
+        ]
+      }
     ]
+        // {
+        //     "type": "pwa-chrome",
+        //     "request": "launch",
+        //     "name": "Launch Chrome against localhost",
+        //     "url": "http://localhost:4200",
+        //     "webRoot": "${workspaceFolder}"
+        // },
+        // {
+        //   "type": "pwa-chrome",
+        //   "request": "attach",
+        //   "name": "Unit tests",
+        //   "address": "localhost",
+        //   "port": 9333,
+        //   "sourceMaps": true,
+        //   "webRoot": "${workspaceFolder}"
+        // },
+        // {
+        //   "name": "Launch Chrome with ng test",
+        //   "type": "pwa-chrome",
+        //   "request": "launch",
+        //   "url": "http://localhost:9876/debug.html",
+        //   "webRoot": "${workspaceRoot}"
+        // },
+        // {
+        //   "type": "chrome",
+        //   "request": "launch",
+        //   "name": "Debug karma tests",
+        //   "url": "http://localhost:9876/debug.html",
+        //   "webRoot": "${workspaceFolder}",
+        //   "runtimeArgs": [
+        //     "--headless"
+        //   ],
+        //   "sourceMaps": true,
+        //   "sourceMapPathOverrides": {
+        //     "webpack:/*": "${webRoot}/*",
+        //     "/./*": "${webRoot}/*",
+        //     "/src/*": "${webRoot}/*",
+        //     "/*": "*",
+        //     "/./~/*": "${webRoot}/node_modules/*"
+        //   },
+        //   "port": 9223
+        // },
+        // {
+        //   "name": "Launch ng e2e",
+        //   "type": "node",
+        //   "request": "launch",
+        //   "program": "${workspaceRoot}/node_modules/protractor/bin/protractor",
+        //   "protocol": "inspector",
+        //   "args": [
+        //     "${workspaceRoot}/protractor.conf.js"
+        //   ]
+        // },
+        // {
+        //   "type": "pwa-chrome",
+        //   "request": "attach",
+        //   "name": "Attach to Karma",
+        //   "address": "localhost",
+        //   "port": 9222,
+        //   "timeout": 600000,
+        //   "sourceMaps": true,
+        //   "webRoot": "${workspaceFolder}",
+        //   "pathMapping": {
+        //     "/_karma_webpack_": "${workspaceFolder}"
+        //   }
+        // },
+        // {
+        //   "type": "node",
+        //   "request": "launch",
+        //   "name": "Run test file",
+        //   "skipFiles": [
+        //     "<node_internals>/**"
+        //   ],
+        //   "console": "integratedTerminal",
+        //   "program": "${workspaceFolder}/node_modules/.bin/ng",
+        //   "args": [
+        //     "test",
+        //     "--include",
+        //     "${relativeFile}"
+        //   ],
+        //   "outFiles": [
+        //     "${workspaceFolder}/**/*.js"
+        //   ]
+        // }
 }

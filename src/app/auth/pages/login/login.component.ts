@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
@@ -17,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private httpClient: HttpClient
   ) {
     if (this.authService.isAuthenticated) {
       this.router.navigate(['/']);
@@ -61,5 +64,16 @@ export class LoginComponent implements OnInit {
           this.errorMessage = 'unknown exception occured.';
         }
       );
+  }
+
+  fireClientError() {
+    // it is not defined, ups Error
+    return throwError('Error thrown');
+  }
+
+  fireServerError() {
+    this.httpClient
+      .get('https://jsonplaceholder.typicode.com/1')
+      .subscribe((data) => console.log('Data: ', data));
   }
 }

@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError, map, shareReplay } from 'rxjs/operators';
 import { User } from '../models/user.model';
-import { BaseService } from 'src/app/shared/base.service';
+import { BaseService } from 'src/app/shared/services/base.service';
 import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
