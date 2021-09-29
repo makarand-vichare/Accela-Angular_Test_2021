@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +13,5 @@ export class NotificationService {
 
     notify(message: string) {
     this._notification.next(message);
-    setTimeout(() => this._notification.next(null), 3000);
   }
 }

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarConfig,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { NotificationService } from '../services/notification.service';
 
 @Component({
@@ -9,24 +14,29 @@ import { NotificationService } from '../services/notification.service';
 export class NotificationComponent implements OnInit {
   constructor(
     private notificationService: NotificationService,
-    private snackBar: MatSnackBar
+    public snackBar: MatSnackBar
   ) {}
 
   notification!: string | null;
+
   ngOnInit() {
     this.notificationService.notification$.subscribe((message) => {
       this.notification = message;
-      this.showSuccess(message!);
+      if (message != null) this.showError(message!);
     });
   }
 
   showSuccess(message: string, action = '', config?: MatSnackBarConfig) {
-    this.snackBar.open(message, action, config);
+    config!.horizontalPosition = 'end';
+    config!.verticalPosition = 'top';
+    this.snackBar.open(message, 'close', config);
   }
 
   showError(message: string): void {
-    // The second parameter is the text in the button.
-    // In the third, we send in the css class for the snack bar.
-    this.snackBar.open(message, 'X', { panelClass: ['error'] });
+    this.snackBar.open(message, 'close', {
+      verticalPosition: 'top', // 'top' | 'bottom'
+      horizontalPosition: 'end', //'start' | 'center' | 'end' | 'left' | 'right'
+      panelClass: ['red-snackbar'],
+    });
   }
 }

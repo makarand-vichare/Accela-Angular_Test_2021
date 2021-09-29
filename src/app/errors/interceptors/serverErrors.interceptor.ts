@@ -16,6 +16,6 @@ export class ServerErrorsInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(retry(5));
+    return next.handle(request).pipe(retry(1));
   }
 }
