@@ -5,8 +5,13 @@ import { LoginComponent } from './auth/pages/login/login.component';
 
 const postsModule = () =>
   import('./posts/posts.module').then((x) => x.PostsModule);
+
+const eventModule = () =>
+  import('./errors/errors.module').then((x) => x.ErrorsModule);
+
 export const routes: Routes = [
   { path: '', component: LoginComponent, pathMatch: 'full' },
+  { path: 'error', loadChildren: eventModule },
   { path: 'posts', loadChildren: postsModule, canActivate: [AuthorizeGuard] },
   { path: '**', redirectTo: '' },
 ];

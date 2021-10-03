@@ -8,9 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class ErrorsHandler implements ErrorHandler {
   constructor(private injector: Injector) {}
 
@@ -28,10 +26,11 @@ export class ErrorsHandler implements ErrorHandler {
       return notificationService.notify(`${error.status} - ${error.message}`);
     } else {
       // Client Error Happend
-      router.navigate(['/error'], { queryParams: { error: error } });
+
+      router.navigate(['/error'], { queryParams: { error: error.message } });
     }
     // Log the error anyway
-    console.error(error);
+    //  console.error(error);
   }
 }
 

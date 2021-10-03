@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { finalize, first } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
 
   fireClientError() {
     // it is not defined, ups Error
-    return throwError('Error thrown');
+    throw new Error('Error thrown');
   }
 
   fireServerError() {

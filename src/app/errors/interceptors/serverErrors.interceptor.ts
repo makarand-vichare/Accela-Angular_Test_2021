@@ -6,8 +6,8 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
 @Injectable()
 export class ServerErrorsInterceptor implements HttpInterceptor {
@@ -16,6 +16,12 @@ export class ServerErrorsInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(retry(1));
+    return next.handle(request).pipe(
+      retry(1),
+      // catchError((error: Error) => {
+      //   window.alert(error.message);
+      //   return throwError(error);
+      // })
+    );
   }
 }
