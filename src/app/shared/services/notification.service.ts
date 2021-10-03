@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -11,7 +12,24 @@ export class NotificationService {
   readonly notification$: Observable<string | null> =
     this._notification.asObservable();
 
-    notify(message: string) {
+  constructor(private snackBar: MatSnackBar, private zone: NgZone) {
+    this.notification$.subscribe((message) => {
+      if (message != null) this.openSnackBar(message!);
+    });
+  }
+  notify(message: string) {
     this._notification.next(message);
+  }
+  openSnackBar(errorText: string): void {
+    this.zone.run(() => {
+      const snackBar = this.snackBar.open(errorText, 'OK', {
+        verticalPosition: 'top',
+        horizontalPosition: 'end',
+        panelClass: ['red-snackbar'],
+      });
+      snackBar.onAction().subscribe(() => {
+        snackBar.dismiss();
+      });
+    });
   }
 }
